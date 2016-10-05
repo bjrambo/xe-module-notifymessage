@@ -1,0 +1,13 @@
+<table name="notifymessage_log">
+	<column name="notify_srl" type="number" size="11" notnull="notnull" primary_key="primary_key" />
+	<column name="notify_type" type="varchar" size="10" notnull="notnull" index="idx_notify_type" />
+	<column name="notify_target_type" type="varchar" size="10" notnull="notnull" index="idx_notify_target_type" />
+	<column name="sender_no" type="varchar" size="15" notnull="notnull" index="idx_sender_no" />
+	<column name="recipient_no" type="varchar" size="15" notnull="notnull" index="idx_recipient_no" />
+	<column name="sms_type" type="varchar" size="10" notnull="notnull" index="idx_sms_type" />
+	<column name="member_srl" type="number" size="11" notnull="notnull" index="idx_member_srl" />
+	<column name="nick_name" type="varchar" size="80" index="idx_nick_name" />
+	<column name="content" type="text" />
+	<column name="state" type="varchar" size="1" index="idx_state" />
+	<column name="regdate" type="date" index="idx_regdate" />
+</table>

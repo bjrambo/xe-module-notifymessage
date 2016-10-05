@@ -1,0 +1,19 @@
+<load target="./css/config.css" />
+<load target="./js/notifymessage.js" />
+<div class="x_page-header">
+	<h1>알림설정</h1>
+</div>
+
+<div class="header4">
+	<ul class="x_nav x_nav-tabs">
+		<li class="x_active"|cond="$act=='dispNotifymessageAdminConfig'"><a href="{getUrl('act','dispNotifymessageAdminConfig')}">기본설정</a></li>
+		<li class="x_active"|cond="$act=='dispNotifymessageAdminSeletedmid'"><a href="{getUrl('act','dispNotifymessageAdminSeletedmid')}">모듈별 사용 설정</a></li>
+		<li class="x_active"|cond="$act=='dispNotifymessageAdminAdvancedconfig'"><a href="{getUrl('act','dispNotifymessageAdminAdvancedconfig')}">고급 설정</a></li>
+		<li class="x_active"|cond="$act=='dispNotifymessageAdminCategories'"><a href="{getUrl('act','dispNotifymessageAdminCategories')}">카테고리 설정</a></li>
+		<li class="x_active"|cond="$act=='dispNotifymessageAdminLogs'"><a href="{getUrl('act','dispNotifymessageAdminLogs')}">알림 로그</a></li>
+	</ul>
+</div>
+
+<div cond="$XE_VALIDATOR_MESSAGE" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+	<p>{$XE_VALIDATOR_MESSAGE}</p>
+</div>

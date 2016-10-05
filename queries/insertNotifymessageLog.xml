@@ -1,0 +1,18 @@
+<query id="insertNotifymessageLog" action="insert">
+	<tables>
+		<table name="notifymessage_log" />
+	</tables>
+	<columns>
+		<column name="notify_srl" var="notify_srl" filter="number" notnull="notnull" />
+		<column name="notify_type" var="notify_type" notnull="notnull" />
+		<column name="notify_target_type" var="notify_target_type" notnull="notnull" />
+		<column name="sender_no" var="sender_no" />
+		<column name="recipient_no" var="recipient_no" />
+		<column name="sms_type" var="sms_type"  />
+		<column name="member_srl" var="member_srl" />
+		<column name="nick_name" var="nick_name" />
+		<column name="content" var="content" />
+		<column name="state" var="state" />
+		<column name="regdate" var="regdate" />
+	</columns>
+</query>

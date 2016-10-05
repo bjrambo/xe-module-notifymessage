@@ -1,0 +1,6 @@
+<table name="notifymessage_reservation">
+	<column name="cellphone" type="number" size="11" notnull="notnull" />
+	<column name="reservdate" type="date" notnull="notnull" />
+	<column name="count" type="number" size="5" notnull="notnull" />
+	<column name="group_id" type="varchar" size="40" notnull="notnull" />
+</table>

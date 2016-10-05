@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<module>
+	<grants/>
+	<permissions/>
+	<actions>
+		<!-- Admin view -->
+		<action name="dispNotifymessageAdminConfig" type="view" admin_index="true" menu_name="notifymessage" menu_index="true"/>
+		<action name="dispNotifymessageAdminSeletedmid" type="view" />
+		<action name="dispNotifymessageAdminCategories" type="view" />
+		<action name="dispNotifymessageAdminAdvancedconfig" type="view" />
+		<action name="dispNotifymessageAdminLogs" type="view" />
+
+		<!-- Admin Controller -->
+		<action name="procNotifymessageAdminConfig" type="controller" />
+		<action name="procNotifymessageAdminCategories" type="controller" />
+	</actions>
+	<menus>
+		<menu name="notifymessage" type="all">
+			<title xml:lang="ko">문자 알림</title>
+		</menu>
+	</menus>
+</module>

@@ -1,0 +1,13 @@
+input.console_font, span.console_font, textarea.console_font {
+	font-family: Consolas, Courier New, Courier, monospace !important;
+}
+
+input.full_width {
+	width: 100% !important;
+	height: 28px !important;
+	box-sizing: border-box;
+}
+
+.bold{
+	font-weight:bold;
+}

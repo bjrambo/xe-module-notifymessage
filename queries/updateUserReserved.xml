@@ -1,0 +1,13 @@
+<query id="updateUserReserved" action="update">
+	<tables>
+		<table name="notifymessage_reservation" />
+	</tables>
+	<columns>
+		<column name="count" var="count" />
+		<column name="group_id" var="group_id" />
+	</columns>
+	<conditions>
+		<condition operation="equal" column="cellphone" var="cellphone" notnull="notnull" />
+		<condition operation="equal" column="reservdate" var="reservdate" pipe="and" />
+	</conditions>
+</query>

@@ -1,0 +1,93 @@
+<include target="_header.html" />
+<form ruleset="insertConfig" action="./" method="post" class="x_form-horizontal" id="fo_notifymessage">
+	<input type="hidden" name="module" value="notifymessage" />
+	<input type="hidden" name="act" value="procNotifymessageAdminConfig" />
+	<input type="hidden" name="disp_act" value="dispNotifymessageAdminConfig">
+	<section class="section">
+		<div class="x_control-group">
+			<label class="x_control-label">알림타입</label>
+			<div class="x_controls">
+				<label for="sending_method_cta" class="x_inline"><input type="checkbox" name="sending_method[cta]" id="sending_method_cta" value="1" checked="checked"|cond="isset($config->sending_method['cta'])" /> 친구톡</label>
+				<label for="sending_method_sms" class="x_inline"><input type="checkbox" name="sending_method[sms]" id="sending_method_sms" value="1" checked="checked"|cond="isset($config->sending_method['sms'])" /> 문자</label>
+				<label for="sending_method_email" class="x_inline"><input type="checkbox" name="sending_method[email]" id="sending_method_email" value="1" checked="checked"|cond="isset($config->sending_method['email'])" /> 이메일</label>
+				<p class="x_help-block">알림타입을 결정합니다. 선택한 항목에 따라 사용이 결정됩니다. 친구톡 사용시, 친구톡실패할 경우 해당 번호로 문자메세지를 전송합니다.</p>
+			</div>
+		</div>
+		<div class="x_control-group">
+			<label class="x_control-label" for="ncenterlite_use">알림센터 사용여부</label>
+			<div class="x_controls">
+				<select name="ncenterlite_use" id="ncenterlite_use">
+					<option value="N" selected="selected"|cond="$config->ncenterlite_use == 'N'">{$lang->notuse}</option>
+					<option value="Y" selected="selected"|cond="$config->ncenterlite_use == 'Y'">{$lang->use}</option>
+				</select>
+				<p class="x_help-block">분류별 알림에 설정된 유저들에게 알림을 전송할 것인지 선택합니다. 분류별 관리자 지정은 상단 버튼의 <a href="./index.php?module=admin&act=dispNotifymessageAdminCategories">카테고리 설정</a> 에서 설정이 가능합니다.</p>
+			</div>
+		</div>
+		<div class="x_control-group">
+			<label class="x_control-label" for="category_message">분류별게시판 문자알림</label>
+			<div class="x_controls">
+				<select name="category_message" id="category_message">
+					<option value="N" selected="selected"|cond="$config->category_message == 'N'">{$lang->notuse}</option>
+					<option value="Y" selected="selected"|cond="$config->category_message == 'Y'">{$lang->use}</option>
+				</select>
+				<p class="x_help-block">분류별 알림에 설정된 유저들에게 알림을 전송할 것인지 선택합니다. 분류별 관리자 지정은 상단 버튼의 <a href="./index.php?module=admin&act=dispNotifymessageAdminCategories">카테고리 설정</a> 에서 설정이 가능합니다.</p>
+			</div>
+		</div>
+		<div class="x_control-group">
+			<label class="x_control-label" for="user_id">문자 관리자 아이디</label>
+			<div class="x_controls">
+				<label class="x_inline">
+					<input type="text" name="user_id" id="user_id" value="{$config->user_id}" />
+				</label>
+				<p class="x_help-block">알림톡에 사용될 관리자 아이디를 입력합니다.</p>
+			</div>
+		</div>
+		<div class="x_control-group">
+			<label class="x_control-label" for="sender_key">sender_key</label>
+			<div class="x_controls">
+				<label class="x_inline">
+					<input type="text" name="sender_key" id="sender_key" value="{$config->sender_key}" />
+				</label>
+				<p class="x_help-block">알림톡신청시 발급받은 센더키를 입력하세요. 샌더키 적용시 알림톡 모듈이 없어도 정상적인 작동을 하게 도와줍니다.</p>
+			</div>
+		</div>
+		<div class="x_control-group">
+			<label class="x_control-label" for="sender_no">발신번호(중요)</label>
+			<div class="x_controls">
+				<label class="x_inline">
+					<input type="text" name="sender_no" id="sender_no" value="{$config->sender_no}" />
+				</label>
+				<p class="x_help-block">ex)01012345678 형식으로 적어주시면 됩니다. 발신번호는 필수입니다. 단, 친구톡에서 발신자 번호가 설정되어있다면 여기에서는 필요가 없습니다.</p>
+			</div>
+		</div>
+		<div class="x_control-group">
+			<label class="x_control-label" for="admin_phones">관리자번호(받는사람)</label>
+			<div class="x_controls">
+				<label class="x_inline">
+					<input type="text" name="admin_phones" id="admin_phones" value="{$config->admin_phones}" />
+				</label>
+				<p class="x_help-block">ex)01012345678 형식으로 적어주시면 됩니다. 받는 사람의 번호를 설정하는 공간입니다. 관리자의 전화번호를 입력하시면 됩니다.</p>
+			</div>
+		</div>
+		<div class="x_control-group">
+			<label class="x_control-label" for="admin_emails">이메일 주소</label>
+			<div class="x_controls">
+				<input id="admin_emails" type="text" name="admin_emails" style="width:300px;" value="{$config->admin_emails}" />
+			</div>
+		</div>
+		<div class="x_control-group">
+			<label class="x_control-label">발신자 정보</label>
+			<div class="x_controls">
+				이름 <input type="text" name="sender_name" style="width:100px;" value="{$config->sender_name}" />
+				이메일 <input type="text" name="sender_email" style="width:240px;" value="{$config->sender_email}" />
+				<a href="#sender_name_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="sender_name_help" class="x_help-block" hidden>입력된 이메일주소를 발신주소로 사용합니다. 비워두시면 글쓴이의 이메일 주소가 입력됩니다.</p>
+			</div>
+		</div>
+	</section>
+	<div class="x_clearfix btnArea">
+		<div class="x_pull-right">
+			<button class="x_btn x_btn-primary" type="submit">{$lang->cmd_registration}</button>
+		</div>
+	</div>
+</form>

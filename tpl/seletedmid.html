@@ -1,0 +1,27 @@
+<include target="./_header.html" />
+
+<form action="./" method="post" class="x_form-horizontal" id="fo_notifymessage">
+	<input type="hidden" name="module" value="notifymessage" />
+	<input type="hidden" name="disp_act" value="dispNotifymessageAdminSeletedmid" />
+	<input type="hidden" name="act" value="procNotifymessageAdminConfig" />
+
+	<section class="section">
+		<div class="x_control-group">
+			<label class="x_control-label">알림사용 게시판</label>
+			<div class="x_controls">
+				<p class="x_help-block">선택한 모듈에서 알림을 사용합니다.</p>
+				<div loop="$mid_list => $mid, $item">
+					<label>
+						<input type="checkbox" value="{$item->module_srl}" name="seleted_module_srls[]" checked="checked"|cond="is_array($config->seleted_module_srls) && in_array($item->module_srl, $config->seleted_module_srls)" />
+						<strong>{$item->browser_title}</strong> ({$item->mid} / {strtoupper($item->module)})
+					</label>
+				</div>
+			</div>
+		</div>
+	</section>
+	<div class="x_clearfix btnArea">
+		<div class="x_pull-right">
+			<button class="x_btn x_btn-primary" type="submit">{$lang->cmd_registration}</button>
+		</div>
+	</div>
+</form>

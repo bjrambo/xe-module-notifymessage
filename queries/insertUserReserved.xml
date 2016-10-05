@@ -1,0 +1,11 @@
+<query id="insertUserReserved" action="insert">
+	<tables>
+		<table name="notifymessage_reservation" />
+	</tables>
+	<columns>
+		<column name="cellphone" var="cellphone" notnull="notnull" />
+		<column name="reservdate" var="reservdate" notnull="notnull" />
+		<column name="count" var="count" filter="number" notnull="notnull" />
+		<column name="group_id" var="group_id"  />
+	</columns>
+</query>

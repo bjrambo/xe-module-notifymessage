@@ -1,0 +1,39 @@
+<include target="_header.html" />
+
+<form action="./" method="post">
+	<input type="hidden" name="module" value="notifymessage" />
+	<input type="hidden" name="act" value="procNotifymessageAdminCategories" />
+
+	<section class="section" style="margin-left: 3%;">
+		<h2 style="margin-left:0%;">분류별 담당자지정</h2>
+		<div class="x_control-group">
+
+			<block loop="$outputs=>$key,$val">
+
+				<h3 style="margin-left:0%;"><strong> {$val->title} 게시판 </strong></h3></th>
+				<table style="margin-left:0%; margin-right: 30%;" class="table even easyList">
+					<tr>
+						<th style="width:150px;"> {$lang->category} </th>
+						<th> 휴대폰 번호 </th>
+						<th> 이메일 </th>
+					</tr>
+					<tr loop="$val->data=>$val2" style="margin-left : 10%;"|cond="$val2->parent_srl!='0'">
+						<input type="hidden" name="module_srls[]" value="{$key}" />
+						<input type="hidden" name="parent_srls[]" value="{$val2->parent_srl}" />
+						<input type="hidden" name="category_srls[]" value="{$val2->category_srl}" />
+						<input type="hidden" name="titles[]" value="{$val2->title}" />
+						<td style="text-align:center;"|cond="$val2->parent_srl==0" >
+							<img src="leaf-last.gif"|cond="$val2->parent_srl!='0'" style="margin-left : 40%;"|cond="$val2->parent_srl!='0'">{$val2->title}
+						</td>
+						<td> <input type="text" name="cellphones[]" value="{$val2->cellphone}" /> </td>
+						<td> <input type="email" name="emails[]" value="{$val2->email}"   /> </td>
+					</tr>
+				</table>
+			</block>
+		</div>
+	</section>
+
+	<div class="btnArea" style="margin-top : 0%;">
+		<input type="submit" class="x_btn x_btn-primary" value="{$lang->cmd_registration}" accesskey="s" />
+	</div>
+</form>

@@ -1,0 +1,14 @@
+<query id="getDocumentCategories" action="select">
+	<tables>
+		<table name="document_categories" />
+	</tables>
+	<columns>
+		<column name="category_srl"  />
+		<column name="module_srl" />
+		<column name="title" />
+		<column name="parent_srl" />
+	</columns>
+	<conditions>
+		<condition operation="equal" column="module_srl" var="module_srl" notnull="notnull" />
+	</conditions>
+</query>
