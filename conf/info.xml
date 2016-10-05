@@ -3,7 +3,7 @@
 	<title xml:lang="ko">알림 문자</title>
 	<description xml:lang="ko">사이트 운영에 필요한 알림과 일부 알림을 문자로 발송합니다.</description>
 	<version>1.0</version>
-	<date>2016-06-21</date>
+	<date>2016-10-05</date>
 	<category>notify</category>
 
 	<author email_address="contact@nurigo.net" link="http://nurigo.net/">

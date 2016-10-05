@@ -12,7 +12,6 @@ class notifymessage extends ModuleObject
 		array('comment.insertComment', 'notifymessage', 'controller', 'triggerAfterInsertComment', 'after'),
 	);
 
-
 	/**
 	 * Install notifymessage module
 	 * @return Object
