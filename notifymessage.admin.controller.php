@@ -63,6 +63,14 @@ class notifymessageAdminController extends notifymessage
 			}
 		}
 
+		if($obj->disp_act == 'dispNotifymessageAdminConfig')
+		{
+			if(!$obj->sending_method)
+			{
+				$config->sending_method = array();
+			}
+		}
+
 		$output = $oModuleController->insertModuleConfig('notifymessage', $config);
 		if(!$output->toBool())
 		{
