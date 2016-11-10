@@ -54,13 +54,6 @@ class notifymessageModel extends notifymessage
 		if(isset($config->sending_method['cta']) || isset($config->sending_method['sms']) && isset($config->sending_method['cta']))
 		{
 			$args->type = 'cta';
-			$json_args = new stdClass();
-			$json_args->type = 'cta';
-			$json_args->to = $args->recipient_no;
-			$json_args->text = $args->content;
-			$extension = array($json_args);
-			// $args->extension 이 있어야지 textmessage 모듈에 coolsms.php 파일에서 재대로 실행가능한데, 이 json값이 배열로 들어가야 정상적으로 실행이 가능
-			$args->extension = json_encode($extension);
 		}
 		elseif(isset($config->sending_method['sms']))
 		{
