@@ -30,23 +30,32 @@ class notifymessage extends ModuleObject
 		$oModuleModel = getModel('module');
 		foreach($this->triggers as $trigger)
 		{
-			if(!$oModuleModel->getTrigger($trigger[0], $trigger[1], $trigger[2], $trigger[3], $trigger[4])) return true;
+			if(!$oModuleModel->getTrigger($trigger[0], $trigger[1], $trigger[2], $trigger[3], $trigger[4]))
+			{
+				return true;
+			}
 		}
 
 		$config = getModel('notifymessage')->getConfig();
 
-		$member_config = getModel('member')->getMemberConfig();
-		$variable_name = array();
-		foreach($member_config->signupForm as $value)
+		// getConfig 단위에서는 모든 설정을 캐시에서 불러오므로 디비쿼리를 하지않지만 맴버쪽은 로직에 따라 불필요한 동작이 있을 수 있음
+		if(!$config->variable_name)
 		{
-			if($value->type == 'tel')
+			$member_config = getModel('member')->getMemberConfig();
+
+			$variable_name = array();
+			foreach($member_config->signupForm as $value)
 			{
-				$variable_name[] = $value->name;
+				if($value->type == 'tel')
+				{
+					$variable_name[] = $value->name;
+				}
 			}
-		}
-		if(!$config->variable_name && count($variable_name) == 1)
-		{
-			return true;
+
+			if(!$config->variable_name && count($variable_name) == 1)
+			{
+				return true;
+			}
 		}
 
 		return FALSE;
