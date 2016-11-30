@@ -241,6 +241,23 @@ class notifymessageModel extends notifymessage
 
 		return true;
 	}
+
+	function getGroupMemberList($group_srl)
+	{
+		$args = new stdClass();
+		$args->selected_group_srl = $group_srl;
+		$args->page = 1;
+		$args->list_count = 9999;
+		$args->page_count = 10;
+		$output = executeQuery('member.getMemberListWithinGroup', $args);
+		if(!$output->toBool())
+		{
+			return $output;
+		}
+		$member_list = $output->data;
+
+		return $member_list;
+	}
 }
 /* End of file notifymessage.model.php */
 /* Location: ./modules/notifymessage/notifymessage.model.php */

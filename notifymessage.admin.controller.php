@@ -31,7 +31,9 @@ class notifymessageAdminController extends notifymessage
 			'time_start',
 			'time_end',
 			'time_switch',
-			'reserv_switch'
+			'reserv_switch',
+			'group_message',
+			'group_srls',
 		);
 
 		foreach($config_vars as $val)

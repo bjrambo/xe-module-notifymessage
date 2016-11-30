@@ -129,124 +129,15 @@ class notifymessageController extends notifymessage
 	 */
 	function triggerAfterInsertDocument(&$obj)
 	{
-		$oNotifymessageModel = getModel('notifymessage');
-		$config = $oNotifymessageModel->getConfig();
-		$oTextmessageController = getController('textmessage');
-		$oModuleModel = getModel('module');
-		$module_info = $oModuleModel->getModuleInfoByModuleSrl($obj->module_srl);
+		$config = getModel('notifymessage')->getConfig();
 
-		$admin_member_info = getModel('member')->getMemberInfoByUserId($config->user_id);
-
-		$set_time = false;
-		if(is_array($config->seleted_module_srls) && in_array($module_info->module_srl, $config->seleted_module_srls) && $config->ncenterlite_use !== 'Y')
+		if($config->group_message)
 		{
-			$args = new stdClass();
-			$args->notify_type = 'D';
-			$args->notify_target_type = 'NP';
-			$args->target_nick_name = $obj->nick_name;
-			$args->target_browser = $module_info->browser_title;
-			$args->target_summary = $obj->title;
-			$args->content = $oNotifymessageModel->getNotifyMessage($args);
-			if($args->content === false)
-			{
-				return new Object();
-			}
-			$args->sender_no = $config->sender_no;
-			$args->recipient_no = $config->admin_phones;
-			$args = $oNotifymessageModel->getFriendTalkSenderKey($args, $config);
-			if($config->reserv_switch == 'on')
-			{
-				$set_time = $oNotifymessageModel->getReservedReportTime($args, $config);
-			}
-			if($set_time == false)
-			{
-				$output = $oTextmessageController->sendMessage($args, FALSE);
-				if(!$output->toBool())
-				{
-					return $output;
-				}
-				else
-				{
-					if($output->get('success_count') >= 1)
-					{
-						// 문자 전송상황을 뜻함
-						$args->state = '1';
-					}
-					else
-					{
-						$args->state = '2';
-					}
-					if($admin_member_info)
-					{
-						$args->member_srl = $admin_member_info->member_srl;
-						$args->nick_name = $admin_member_info->nick_name;
-					}
-					else
-					{
-						$args->member_srl = '0';
-						$args->nick_name = '관리자';
-					}
-					$log_output = self::insertNotifymessageLog($args);
-					if(!$log_output->toBool())
-					{
-						return $output;
-					}
-				}
-			}
-
-			// 굳이 설정을 만든 이유는 쿼리 1개라도 줄이기 위함 (분류관리자를 확인하기 위해 쿼리가 실행됨)
-			if($config->category_message == 'Y')
-			{
-				// 분류별 설정에서 관리자설정이 되어있으면 문자알림 또는 친구톡을 사용
-				$category_args = new stdClass();
-				$category_args->category_srl = $obj->category_srl;
-				$category_output = executeQuery('notifymessage.getAdminInfo', $category_args);
-				$category_admins = $category_output->data;
-				if($category_admins->cellphone)
-				{
-					$args->recipient_no = $category_admins->cellphone;
-					$args = $oNotifymessageModel->getFriendTalkSenderKey($args, $config);
-					if($config->reserv_switch == 'on')
-					{
-						$set_time = $oNotifymessageModel->getReservedReportTime($args, $config);
-					}
-					if($set_time == false)
-					{
-						$output = $oTextmessageController->sendMessage($args, FALSE);
-						if(!$output->toBool())
-						{
-							return $output;
-						}
-						else
-						{
-							if($output->get('success_count') >= 1)
-							{
-								// 문자 전송상황을 뜻함
-								$args->state = '1';
-							}
-							else
-							{
-								$args->state = '2';
-							}
-							if($admin_member_info)
-							{
-								$args->member_srl = $admin_member_info->member_srl;
-								$args->nick_name = $admin_member_info->nick_name;
-							}
-							else
-							{
-								$args->member_srl = '0';
-								$args->nick_name = '관리자';
-							}
-							$log_output = self::insertNotifymessageLog($args);
-							if(!$log_output->toBool())
-							{
-								return $output;
-							}
-						}
-					}
-				}
-			}
+			$output = self::pushDocumentGroupMessage($obj, $config);
+		}
+		else
+		{
+			$output = self::pushDocumentDefaultMessage($obj, $config);
 		}
 	}
 
@@ -391,6 +282,224 @@ class notifymessageController extends notifymessage
 		$output = executeQuery('notifymessage.insertNotifymessageLog', $args);
 
 		return $output;
+	}
+
+	/**
+	 * 기본적인 메세지 전송방법을 실행함.
+	 * @param $obj
+	 * @return bool
+	 */
+	public static function pushDocumentDefaultMessage(&$obj, $config)
+	{
+		$oNotifymessageModel = getModel('notifymessage');
+
+		$oTextmessageController = getController('textmessage');
+		$oModuleModel = getModel('module');
+		$module_info = $oModuleModel->getModuleInfoByModuleSrl($obj->module_srl);
+
+		$admin_member_info = getModel('member')->getMemberInfoByUserId($config->user_id);
+
+		$set_time = false;
+		if(is_array($config->seleted_module_srls) && in_array($module_info->module_srl, $config->seleted_module_srls) && $config->ncenterlite_use !== 'Y')
+		{
+			$args = new stdClass();
+			$args->notify_type = 'D';
+			$args->notify_target_type = 'NP';
+			$args->target_nick_name = $obj->nick_name;
+			$args->target_browser = $module_info->browser_title;
+			$args->target_summary = $obj->title;
+			$args->content = $oNotifymessageModel->getNotifyMessage($args);
+			if($args->content === false)
+			{
+				return new Object();
+			}
+			$args->sender_no = $config->sender_no;
+			$args->recipient_no = $config->admin_phones;
+			$args = $oNotifymessageModel->getFriendTalkSenderKey($args, $config);
+			if($config->reserv_switch == 'on')
+			{
+				$set_time = $oNotifymessageModel->getReservedReportTime($args, $config);
+			}
+			if($set_time == false)
+			{
+				$output = $oTextmessageController->sendMessage($args, FALSE);
+				if(!$output->toBool())
+				{
+					return $output;
+				}
+				else
+				{
+					if($output->get('success_count') >= 1)
+					{
+						// 문자 전송상황을 뜻함
+						$args->state = '1';
+					}
+					else
+					{
+						$args->state = '2';
+					}
+					if($admin_member_info)
+					{
+						$args->member_srl = $admin_member_info->member_srl;
+						$args->nick_name = $admin_member_info->nick_name;
+					}
+					else
+					{
+						$args->member_srl = '0';
+						$args->nick_name = '관리자';
+					}
+					$log_output = self::insertNotifymessageLog($args);
+					if(!$log_output->toBool())
+					{
+						return $output;
+					}
+				}
+			}
+
+			// 굳이 설정을 만든 이유는 쿼리 1개라도 줄이기 위함 (분류관리자를 확인하기 위해 쿼리가 실행됨)
+			if($config->category_message == 'Y')
+			{
+				// 분류별 설정에서 관리자설정이 되어있으면 문자알림 또는 친구톡을 사용
+				$category_args = new stdClass();
+				$category_args->category_srl = $obj->category_srl;
+				$category_output = executeQuery('notifymessage.getAdminInfo', $category_args);
+				$category_admins = $category_output->data;
+				if($category_admins->cellphone)
+				{
+					$args->recipient_no = $category_admins->cellphone;
+					$args = $oNotifymessageModel->getFriendTalkSenderKey($args, $config);
+					if($config->reserv_switch == 'on')
+					{
+						$set_time = $oNotifymessageModel->getReservedReportTime($args, $config);
+					}
+					if($set_time == false)
+					{
+						$output = $oTextmessageController->sendMessage($args, FALSE);
+						if(!$output->toBool())
+						{
+							return $output;
+						}
+						else
+						{
+							if($output->get('success_count') >= 1)
+							{
+								// 문자 전송상황을 뜻함
+								$args->state = '1';
+							}
+							else
+							{
+								$args->state = '2';
+							}
+							if($admin_member_info)
+							{
+								$args->member_srl = $admin_member_info->member_srl;
+								$args->nick_name = $admin_member_info->nick_name;
+							}
+							else
+							{
+								$args->member_srl = '0';
+								$args->nick_name = '관리자';
+							}
+							$log_output = self::insertNotifymessageLog($args);
+							if(!$log_output->toBool())
+							{
+								return $output;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return true;
+	}
+
+	public static function pushDocumentGroupMessage($obj, $config)
+	{
+		$oModuleModel = getModel('module');
+		$oNotifymessageModel = getModel('notifymessage');
+		$oTextmessageController = getController('textmessage');
+
+		$module_info = $oModuleModel->getModuleInfoByModuleSrl($obj->module_srl);
+		$admin_member_info = getModel('member')->getMemberInfoByUserId($config->user_id);
+
+		$args = new stdClass();
+		$args->selected_group_srl = $config->group_srls;
+		$output = executeQueryArray('member.getMemberListWithinGroup', $args);
+		if(!$output->toBool())
+		{
+			return $output;
+		}
+		if(!$output->data)
+		{
+			return false;
+		}
+
+		$member_list = $output->data;
+		$member_number = array();
+		foreach($member_list as $member_info)
+		{
+			$member_extra_var = unserialize($member_info->extra_vars);
+			$member_number[$member_info->member_srl] = $member_extra_var->{$config->variable_name}[0].$member_extra_var->{$config->variable_name}[1].$member_extra_var->{$config->variable_name}[2];
+		}
+
+		$phone_numbers = implode(',', $member_number);
+
+		$set_time = false;
+
+		$args = new stdClass();
+		$args->notify_type = 'D';
+		$args->notify_target_type = 'NP';
+		$args->target_nick_name = $obj->nick_name;
+		$args->target_browser = $module_info->browser_title;
+		$args->target_summary = $obj->title;
+		$args->content = $oNotifymessageModel->getNotifyMessage($args);
+		if($args->content === false)
+		{
+			return new Object();
+		}
+		$args->sender_no = $config->sender_no;
+		$args->recipient_no = $phone_numbers;
+		$args = $oNotifymessageModel->getFriendTalkSenderKey($args, $config);
+		if($config->reserv_switch == 'on')
+		{
+			$set_time = $oNotifymessageModel->getReservedReportTime($args, $config);
+		}
+		if($set_time == false)
+		{
+			$output = $oTextmessageController->sendMessage($args, FALSE);
+			if(!$output->toBool())
+			{
+				return $output;
+			}
+			else
+			{
+				if($output->get('success_count') >= 1)
+				{
+					// 문자 전송상황을 뜻함
+					$args->state = '1';
+				}
+				else
+				{
+					$args->state = '2';
+				}
+				if($admin_member_info)
+				{
+					$args->member_srl = $admin_member_info->member_srl;
+					$args->nick_name = $admin_member_info->nick_name;
+				}
+				else
+				{
+					$args->member_srl = '0';
+					$args->nick_name = '관리자';
+				}
+				$log_output = self::insertNotifymessageLog($args);
+				if(!$log_output->toBool())
+				{
+					return $output;
+				}
+			}
+		}
 	}
 }
 /* End of file notifymessage.controller.php */
