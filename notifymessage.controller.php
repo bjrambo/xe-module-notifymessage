@@ -423,19 +423,8 @@ class notifymessageController extends notifymessage
 		$module_info = $oModuleModel->getModuleInfoByModuleSrl($obj->module_srl);
 		$admin_member_info = getModel('member')->getMemberInfoByUserId($config->user_id);
 
-		$args = new stdClass();
-		$args->selected_group_srl = $config->group_srls;
-		$output = executeQueryArray('member.getMemberListWithinGroup', $args);
-		if(!$output->toBool())
-		{
-			return $output;
-		}
-		if(!$output->data)
-		{
-			return false;
-		}
+		$member_list = $oNotifymessageModel->getGroupMemberList($config->group_srls);
 
-		$member_list = $output->data;
 		$member_number = array();
 		foreach($member_list as $member_info)
 		{
