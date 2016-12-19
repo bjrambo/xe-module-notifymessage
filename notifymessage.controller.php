@@ -251,7 +251,7 @@ class notifymessageController extends notifymessage
 						$log_output = self::insertNotifymessageLog($args);
 						if(!$log_output->toBool())
 						{
-							return $output;
+							return $log_output;
 						}
 					}
 				}
