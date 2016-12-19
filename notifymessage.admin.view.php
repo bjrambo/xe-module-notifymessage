@@ -17,8 +17,11 @@ class notifymessageAdminView extends notifymessage
 	{
 		$oNotifymessageModel = getModel('notifymessage');
 
+		$group_list = getModel('member')->getGroups();
 		$config = $oNotifymessageModel->getConfig();
+
 		Context::set('config', $config);
+		Context::set('group_list', $group_list);
 	}
 
 	/**

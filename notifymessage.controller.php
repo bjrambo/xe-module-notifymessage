@@ -311,7 +311,7 @@ class notifymessageController extends notifymessage
 			$args->content = $oNotifymessageModel->getNotifyMessage($args);
 			if($args->content === false)
 			{
-				return new Object();
+				return false;
 			}
 			$args->sender_no = $config->sender_no;
 			$args->recipient_no = $config->admin_phones;
@@ -414,6 +414,12 @@ class notifymessageController extends notifymessage
 		return true;
 	}
 
+	/**
+	 * 그룹전송을 담당함.
+	 * @param $obj
+	 * @param $config
+	 * @return bool|object
+	 */
 	public static function pushDocumentGroupMessage($obj, $config)
 	{
 		$oModuleModel = getModel('module');
@@ -423,7 +429,9 @@ class notifymessageController extends notifymessage
 		$module_info = $oModuleModel->getModuleInfoByModuleSrl($obj->module_srl);
 		$admin_member_info = getModel('member')->getMemberInfoByUserId($config->user_id);
 
-		$member_list = $oNotifymessageModel->getGroupMemberList($config->group_srls);
+		$group_srls = implode(',', $config->group_srls);
+
+		$member_list = $oNotifymessageModel->getGroupMemberList($group_srls);
 
 		$member_number = array();
 		foreach($member_list as $member_info)
@@ -445,7 +453,7 @@ class notifymessageController extends notifymessage
 		$args->content = $oNotifymessageModel->getNotifyMessage($args);
 		if($args->content === false)
 		{
-			return new Object();
+			return false;
 		}
 		$args->sender_no = $config->sender_no;
 		$args->recipient_no = $phone_numbers;
@@ -489,6 +497,7 @@ class notifymessageController extends notifymessage
 				}
 			}
 		}
+		return true;
 	}
 }
 /* End of file notifymessage.controller.php */
