@@ -71,6 +71,10 @@ class notifymessageAdminController extends notifymessage
 			{
 				$config->sending_method = array();
 			}
+			if(empty($obj->group_srls))
+			{
+				$config->group_srls = array();
+			}
 		}
 
 		$output = $oModuleController->insertModuleConfig('notifymessage', $config);

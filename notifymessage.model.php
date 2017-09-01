@@ -59,7 +59,6 @@ class notifymessageModel extends notifymessage
 		{
 			$args->type = 'sms';
 		}
-
 		return $args;
 	}
 
